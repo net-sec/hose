@@ -10,8 +10,9 @@ Installation
 2. Configure the box hostname, ip address and the user to connect with: https://github.com/net-sec/hose/blob/main/inventory.yaml#L5
 3. Run **make install**
 
+
+
+
 .. code-block:: bash
 
     echo "Yo"
-
-
