@@ -1,0 +1,8 @@
+all:
+  children:
+    metal:
+      hosts:
+        hose.lan:
+          ansible_host: 10.1.1.2
+          ansible_user: core
+     
