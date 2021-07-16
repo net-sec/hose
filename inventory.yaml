@@ -5,4 +5,10 @@ all:
         hose.lan:
           ansible_host: 10.1.1.2
           ansible_user: core
-     
+      vars:
+        container_runtime: podman
+        scanning_interface: enp2s0
+        sshtunnel_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDZbW5JooZOt9M0GNwKlussAnsW8rTwyOGl/qF/UgvVxtYqGgi8nlpVGA+/MWQUfxNWz4d5JN0uE0tt0DPpqumT5PkrNQ7oRb1A+DHmD3xZ68YT5JWz+lWHaP1DAiBV5tBaaiGPl5ThAL7o23s4p6pRKLd+R1Lq+TootMi1VhJEFa4vM17FqTDx2FRDtRwPNP/wbMEpfTy+owLpDYMCdpZiBLHOrjwnoUWkBZU7gD/QO3loeKIkWdVWm+dX+yfavSBjNEySt0trRJBBqaKyj1f4ezgDcSNOJJORnR5mB494n6H2aeGdQEde0aofXy/rtTMhJXCGfoBOjQFDZPkOqecKkMq/BHluWc+4I/r2Nx3qeONmMGO8eMmpc6gM9YmQdGP7royK1FqjREa4KRFXjLsLLx7INOmZhwGM+DZAoRo/kKHY5JCmbPElpP9GDuo8QUGEjP7REE/rWjmdm88sZ6i+DnJ6VjmP3wzcLB8Krr9fTBjYoBBcC8lMag1eq8d9hN2vLEhIrFDmd5rB9MwMZjIMd0j0N+xTbCnOOqC/AXNMaj6Z/ATAeJfp8flVwLCxFDJy7A7akzbAIETZBWxrbQtZKwdQiCndqQl+hh62JzhnKua7Jbr4ZsKl6DHEA+fxDn3W/3LINMdjwR2aLQt5m9AZCfGuDXK8I2i+o+wQrZQRZQ== claudio@local"
+        external_dns:
+          - 94.140.14.15
+          - 94.140.15.16
