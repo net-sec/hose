@@ -1,0 +1,50 @@
+- name: Check suricata service
+  command: ssh {{ ansible_user }}@{{ ansible_host }} ls -hal /etc/systemd/system/suricata.service
+  delegate_to: 127.0.0.1
+  register: result
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+
+- name: Add suricata service
+  template:
+    src: etc/systemd/system/suricata.service
+    dest: /etc/systemd/system/suricata.service
+    owner: root
+    group: root
+    mode: 0600
+  become: yes
+  when: result.rc > 0
+
+- name: Include daemon reload if needed
+  include: "tasks/daemon-reload.yaml"
+  when: result.rc > 0
+
+- name: Enable and start suricata.service
+  systemd:
+    name: suricata
+    state: started
+    enabled: yes
+  become: yes
+  when: result.rc > 0
+
+
+# 120  podman exec -it --user suricata suricata suricata-update -f
+# 128  podman exec -it --user suricata suricata suricata-update -h
+# 129  podman exec -it --user suricata suricata suricata-update list-sources
+# 133  podman exec -it --user suricata suricata suricata-update add-source -h
+# 134  podman exec -it --user suricata suricata suricata-update disable-source et/pro
+# 135  podman exec -it --user suricata suricata suricata-update disable-source et/open
+# 136  podman exec -it --user suricata suricata suricata-update enable-source et/open
+# 137  podman exec -it --user suricata suricata suricata-update -h
+# 138  podman exec -it --user suricata suricata suricata-update update-sources
+# 139  podman exec -it --user suricata suricata suricata-update enable-source et/open
+# 140  podman exec -it --user suricata suricata suricata-update list-sources
+# 141  podman exec -it --user suricata suricata suricata-update enable-source tgreen/hunting
+# 142  podman exec -it --user suricata suricata suricata-update enable-source etnetera/aggressive
+# 143  podman exec -it --user suricata suricata suricata-update enable-source sslbl/ja3-fingerprints
+# 144  podman exec -it --user suricata suricata suricata-update enable-source sslbl/ssl-fp-blacklist
+# 145  podman exec -it --user suricata suricata suricata-update enable-source ptresearch/attackdetection
+# 146  podman exec -it --user suricata suricata suricata-update enable-source oisf/trafficid
+# 147  podman exec -it --user suricata suricata suricata-update -h
+# 148  podman exec -it --user suricata suricata suricata-update update-sources
