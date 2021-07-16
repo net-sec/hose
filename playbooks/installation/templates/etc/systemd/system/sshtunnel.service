@@ -1,0 +1,21 @@
+[Unit]
+Description=SSH Daemon with python in a container
+After=network-online.target
+
+[Service]
+TimeoutStartSec=0
+User=core
+Group=core
+Restart=always
+ExecStartPre=-{{ container_runtime }} pull docker.io/walser/sshd:latest
+ExecStart={{ container_runtime }} run \
+  --name sshtunnel \
+  -v /home/core/.ssh/sshtunnel_public_key:/home/jolly/.ssh/authorized_keys:z \
+  -p 2222:22 \
+  docker.io/walser/sshd:latest
+
+ExecStop={{ container_runtime }} stop sshtunnel
+ExecStop=-{{ container_runtime }} rm -f sshtunnel
+
+[Install]
+WantedBy=multi-user.target

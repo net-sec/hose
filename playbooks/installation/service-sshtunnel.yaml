@@ -1,0 +1,33 @@
+- copy:
+    content: "{{ sshtunnel_public_key }}"
+    dest: "/home/core/.ssh/sshtunnel_public_key"
+
+- name: Check sshtunnel service
+  command: ssh {{ ansible_user }}@{{ ansible_host }} ls -hal /etc/systemd/system/sshtunnel.service
+  delegate_to: 127.0.0.1
+  register: result
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+
+- name: Add sshtunnel service
+  template:
+    src: etc/systemd/system/sshtunnel.service
+    dest: /etc/systemd/system/sshtunnel.service
+    owner: root
+    group: root
+    mode: 0600
+  become: yes
+  when: result.rc > 0
+
+- name: Include daemon reload if needed
+  include: "tasks/daemon-reload.yaml"
+  when: result.rc > 0
+
+- name: Enable and start sshtunnel.service
+  systemd:
+    name: sshtunnel
+    state: started
+    enabled: yes
+  become: yes
+  when: result.rc > 0
