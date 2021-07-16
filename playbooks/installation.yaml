@@ -2,3 +2,5 @@
   gather_facts: no
   tasks:
    - include: installation/service-pihole.yaml
+   - include: installation/service-suricata.yaml
+   - include: installation/service-sshtunnel.yaml
