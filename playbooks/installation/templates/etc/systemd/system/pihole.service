@@ -5,27 +5,25 @@ After=network-online.target
 [Service]
 TimeoutStartSec=0
 Restart=always
-#User=core
-#Group=core
-ExecStartPre=-podman pull docker.io/pihole/pihole:latest
-ExecStart=podman run \
+ExecStartPre=-{{ container_runtime }} pull docker.io/pihole/pihole:latest
+ExecStart={{ container_runtime }} run \
     -p 53:53/tcp -p 53:53/udp \
     -p 80:80 \
     -e TZ="Europe/Zurich" \
     -v "/etc/pihole/:/etc/pihole/:z" \
     -v "/etc/dnsmasq.d/:/etc/dnsmasq.d/:z" \
-    --dns=127.0.0.1 --dns=1.1.1.1 \
+    --dns={{ external_dns | join(' --dns=') }} \
     --restart=unless-stopped \
     --hostname {{ inventory_hostname }} \
     -e VIRTUAL_HOST="{{ inventory_hostname }}" \
     -e PROXY_LOCATION="{{ inventory_hostname }}" \
-    -e ServerIP="{{ hostvars[{{ inventory_hostname }}]['ansible_ssh_host'] }}" \
+    -e ServerIP="{{ ansible_host }}" \
     --cgroup-manager=systemd \
     --name pihole \
     docker.io/pihole/pihole:latest
 
-ExecStop=/usr/bin/podman stop pihole
-ExecStop=-podman rm -f pihole
+ExecStop={{ container_runtime }} stop pihole
+ExecStop=-{{ container_runtime }} rm -f pihole
 
 [Install]
 WantedBy=multi-user.target
