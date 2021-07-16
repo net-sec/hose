@@ -20,7 +20,7 @@
   include: "tasks/daemon-reload.yaml"
   when: result.rc > 0
 
-- name: Enable and start pi.service
+- name: Enable and start pihole.service
   systemd:
     name: pihole
     state: started
