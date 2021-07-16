@@ -4,13 +4,13 @@ After=network-online.target
 
 [Service]
 TimeoutStartSec=0
-User=core
-Group=core
+#User=core
+#Group=core
 Restart=always
 ExecStartPre=-{{ container_runtime }} pull docker.io/walser/sshd:latest
 ExecStart={{ container_runtime }} run \
   --name sshtunnel \
-  -v /home/core/.ssh/sshtunnel_public_key:/home/jolly/.ssh/authorized_keys:z \
+  -v /home/core/.ssh/sshtunnel_public_key:/home/jolly/.ssh/authorized_keys:ro \
   -p 2222:22 \
   docker.io/walser/sshd:latest
 
